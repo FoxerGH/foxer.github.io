@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Display bidPRice</title>
+  <title>Display bidPrice</title>
 </head>
 <body>
-  <h1>bidPRice from API</h1>
+  <h1>bidPrice from API</h1>
   <div id="bidPrice">Loading...</div>
 
   <script>
@@ -17,11 +17,11 @@
         return response.json();
       })
       .then(data => {
-        // Display the bidPRice in the div
+        // Display the bidPrice in the div
         const bidPriceElement = document.getElementById('bidPrice');
         
-        // Adjust this if bidPRice is nested in the data
-        bidPriceElement.textContent = data.bidPRice ?? 'bidPRice not found';
+        // Adjust this if bidPrice is nested in the data
+        bidPriceElement.textContent = data.bidPrice ?? 'bidPrice not found';
       })
       .catch(error => {
         document.getElementById('bidPrice').textContent = 'Error loading data';
