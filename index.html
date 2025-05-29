@@ -2,29 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Display bidPrice</title>
+  <title>Display priceCZK</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f9f9f9;
+      color: #333;
+    }
+    #priceCZK {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>bidPrice from API</h1>
-  <div id="bidPrice">Loading...</div>
+  <h1>Current priceCZK</h1>
+  <div id="priceCZK">Loading...</div>
 
   <script>
-    fetch('https://market.ote-cr.cz/KSX/rest/market/vdp/summary')
+    fetch('https://spotovaelektrina.cz/api/v1/price/get-actual-price-json')
       .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return response.json();
       })
       .then(data => {
-        // Display the bidPrice in the div
-        const bidPriceElement = document.getElementById('bidPrice');
-        
-        // Adjust this if bidPrice is nested in the data
-        bidPriceElement.textContent = data.bidPrice ?? 'bidPrice not found';
+        const priceElement = document.getElementById('priceCZK');
+
+        // Show priceCZK or fallback message
+        priceElement.textContent = data.priceCZK !== undefined 
+          ? data.priceCZK 
+          : 'priceCZK not found';
       })
       .catch(error => {
-        document.getElementById('bidPrice').textContent = 'Error loading data';
+        document.getElementById('priceCZK').textContent = 'Error loading data';
         console.error('Error:', error);
       });
   </script>
