@@ -39,6 +39,23 @@
         document.getElementById('priceCZK').textContent = 'Error loading data';
         console.error('Error:', error);
       });
+        fetch('https://market.ote-cr.cz/KSX/rest/market/vdp/detail')
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        const priceElement = document.getElementById('bidPrice');
+
+        // Show bidPrice or fallback message
+        priceElement.textContent = data.bidPrice !== undefined 
+          ? data.bidPrice 
+          : 'bidPrice not found';
+      })
+      .catch(error => {
+        document.getElementById('bidPrice').textContent = 'Error loading data';
+        console.error('Error:', error);
+      });
   </script>
 </body>
 </html>
