@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Display priceCZK</title>
+  <meta charset="UTF-8">
+  <title>Price Fetcher</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 2rem;
-      background: #f9f9f9;
-      color: #333;
+      padding: 20px;
     }
-    #priceCZK {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-top: 1rem;
+    .result {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Current priceCZK</h1>
-  <div id="priceCZK">Loading...</div>
+
+  <h1>Electricity Market Prices</h1>
+  <button onclick="fetchPrices()">Fetch Prices</button>
+
+  <div class="result">
+    <p><strong>PriceCZK:</strong> <span id="priceCZK">Loading...</span></p>
+    <p><strong>bidPrice:</strong> <span id="bidPrice">Loading...</span></p>
+  </div>
 
   <script>
-    fetch('https://spotovaelektrina.cz/api/v1/price/get-actual-price-json')
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then(data => {
-        const priceElement = document.getElementById('priceCZK');
+    async function fetchPrices() {
+      try {
+        // Reset display
+        document.getElementById('priceCZK').textContent = 'Loading...';
+        document.getElementById('bidPrice').textContent = 'Loading...';
 
-        // Show priceCZK or fallback message
-        priceElement.textContent = data.priceCZK !== undefined 
-          ? data.priceCZK 
-          : 'priceCZK not found';
-      })
-      .catch(error => {
-        document.getElementById('priceCZK').textContent = 'Error loading data';
-        console.error('Error:', error);
-      });
+        // Fetch PriceCZK
+        const res1 = await fetch('https://spotovaelektrina.cz/api/v1/price/get-actual-price-json');
+        const data1 = await res1.json();
+        const priceCZK = data1?.data?.PriceCZK ?? 'N/A';
+        document.getElementById('priceCZK').textContent = priceCZK;
+
+        // Fetch bidPrice
+        const res2 = await fetch('https://market.ote-cr.cz/KSX/rest/market/vdp/detail');
+        const data2 = await res2.json();
+        const bidPrice = data2?.bidPrice ?? 'N/A';
+        document.getElementById('bidPrice').textContent = bidPrice;
+
+      } catch (err) {
+        console.error('Fetch error:', err);
+        document.getElementById('priceCZK').textContent = 'Error';
+        document.getElementById('bidPrice').textContent = 'Error';
+      }
+    }
   </script>
+
 </body>
 </html>
