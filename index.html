@@ -41,7 +41,7 @@
         document.getElementById('priceCZK').textContent = 'Error loading data';
         console.error('Error:', error);
       });
-        fetch('https://market.ote-cr.cz/KSX/rest/market/vdp/detail')
+        fetch('https://market.ote-cr.cz/KSX/rest/market/vdp/summary')
       .then(response => {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return response.json();
